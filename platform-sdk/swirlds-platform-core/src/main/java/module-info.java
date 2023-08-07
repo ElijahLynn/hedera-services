@@ -1,7 +1,7 @@
 /**
  * The Swirlds public API module used by platform applications.
  */
-module com.swirlds.platform {
+module com.swirlds.platform.core {
 
     /* Public Package Exports. This list should remain alphabetized. */
     exports com.swirlds.platform;
@@ -128,11 +128,11 @@ module com.swirlds.platform {
     /* Swirlds Libraries */
     requires com.swirlds.base;
     requires transitive com.swirlds.common;
-    requires com.swirlds.common.test;
+    requires com.swirlds.common.testing;
     requires com.swirlds.test.framework;
     requires com.swirlds.logging;
     requires com.swirlds.cli;
-    requires transitive com.swirlds.gui;
+    requires transitive com.swirlds.platform.gui;
 
     /* JDK Libraries */
     requires java.management;
@@ -160,7 +160,7 @@ module com.swirlds.platform {
     requires com.swirlds.jasperdb;
     requires com.swirlds.virtualmap;
     requires com.swirlds.fcqueue;
-    requires com.swirlds.config;
+    requires com.swirlds.config.api;
 
     /* Command Line Utilities */
     requires info.picocli;

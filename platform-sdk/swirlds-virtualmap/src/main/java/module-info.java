@@ -15,6 +15,6 @@ open module com.swirlds.virtualmap {
     requires java.sql;
     requires java.management; // Test dependency
     requires org.apache.commons.lang3;
-    requires com.swirlds.config;
+    requires com.swirlds.config.api;
     requires static com.github.spotbugs.annotations;
 }
