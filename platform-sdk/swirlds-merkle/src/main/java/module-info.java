@@ -9,12 +9,12 @@ open module com.swirlds.merkle {
     exports com.swirlds.merkle.map.internal;
 
     requires com.swirlds.common;
+    requires com.swirlds.fchashmap;
+    requires com.swirlds.fcqueue;
     requires com.swirlds.logging;
     requires com.swirlds.platform.core;
-    requires com.swirlds.fcqueue;
-    requires com.swirlds.fchashmap;
-    requires org.apache.logging.log4j;
-    requires org.apache.commons.lang3;
     requires java.sql;
+    requires org.apache.commons.lang3;
+    requires org.apache.logging.log4j;
     requires static com.github.spotbugs.annotations;
 }

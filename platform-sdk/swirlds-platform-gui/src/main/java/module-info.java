@@ -5,9 +5,9 @@ module com.swirlds.platform.gui {
     exports com.swirlds.gui.model;
 
     requires transitive java.desktop;
-    requires org.apache.commons.lang3;
     requires com.swirlds.common;
-    requires static com.github.spotbugs.annotations;
     requires com.swirlds.logging;
+    requires org.apache.commons.lang3;
     requires org.apache.logging.log4j;
+    requires static com.github.spotbugs.annotations;
 }
