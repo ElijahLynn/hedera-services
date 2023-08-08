@@ -1,7 +1,7 @@
-open module com.swirlds.platform.test.fixtures {
+open module com.swirlds.platform.core.test.fixtures {
     requires com.swirlds.common;
     requires com.swirlds.common.test.fixtures;
-    requires com.swirlds.platform;
+    requires com.swirlds.platform.core;
     requires org.apache.commons.lang3;
     requires org.junit.jupiter.api;
     requires com.swirlds.test.framework;
