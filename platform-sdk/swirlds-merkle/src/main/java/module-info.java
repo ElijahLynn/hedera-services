@@ -8,13 +8,9 @@ open module com.swirlds.merkle {
             com.swirlds.merkle.test;
     exports com.swirlds.merkle.map.internal;
 
-    requires com.swirlds.common;
-    requires com.swirlds.fchashmap;
-    requires com.swirlds.fcqueue;
-    requires com.swirlds.logging;
-    requires com.swirlds.platform.core;
+    requires transitive com.swirlds.common;
+    requires transitive com.swirlds.fchashmap;
     requires java.sql;
     requires org.apache.commons.lang3;
-    requires org.apache.logging.log4j;
     requires static com.github.spotbugs.annotations;
 }
