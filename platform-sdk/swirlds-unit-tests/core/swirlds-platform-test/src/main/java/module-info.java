@@ -9,7 +9,6 @@ open module com.swirlds.platform.test {
     requires com.swirlds.config.api;
     requires com.swirlds.test.framework;
     requires java.desktop;
-    requires org.apache.commons.lang3;
     requires org.junit.jupiter.api;
     requires org.mockito;
     requires static com.github.spotbugs.annotations;

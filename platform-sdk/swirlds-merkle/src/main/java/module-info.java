@@ -11,6 +11,5 @@ open module com.swirlds.merkle {
     requires transitive com.swirlds.common;
     requires transitive com.swirlds.fchashmap;
     requires java.sql;
-    requires org.apache.commons.lang3;
     requires static com.github.spotbugs.annotations;
 }
