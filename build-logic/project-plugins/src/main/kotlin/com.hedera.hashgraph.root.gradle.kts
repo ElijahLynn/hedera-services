@@ -14,37 +14,82 @@
  * limitations under the License.
  */
 
+import Utils.Companion.versionTxt
+import net.swiftzer.semver.SemVer
+
 plugins {
     id("com.hedera.hashgraph.aggregate-reports")
     id("com.hedera.hashgraph.dependency-analysis")
     id("com.hedera.hashgraph.repositories")
     id("com.hedera.hashgraph.spotless-conventions")
     id("com.hedera.hashgraph.spotless-kotlin-conventions")
+    id("lazy.zoo.gradle.git-data-plugin")
 }
 
-// Lifecycle task configuration:
-// Link the lifecycle tasks in the root project to the corresponding lifecycle tasks in the
-// subprojects. This is needed to complete the umbrella build lifecycle task setup.
-// See setup in: com.hedera.hashgraph.umbrella.gradle.kts
+spotless { kotlinGradle { target("build-logic/**/*.gradle.kts") } }
 
-tasks.register("checkAllModuleInfo")
+tasks.register("githubVersionSummary") {
+    group = "github"
+    doLast {
+        val ghStepSummaryPath: String =
+            providers.environmentVariable("GITHUB_STEP_SUMMARY").orNull
+                ?: throw IllegalArgumentException(
+                    "This task may only be run in a Github Actions CI environment!" +
+                        "Unable to locate the GITHUB_STEP_SUMMARY environment variable."
+                )
 
-configureLifecycleTask("clean")
+        Utils.generateProjectVersionReport(
+            rootProject,
+            File(ghStepSummaryPath).outputStream().buffered()
+        )
+    }
+}
 
-configureLifecycleTask("assemble")
+tasks.register("showVersion") {
+    group = "versioning"
+    doLast { println(project.version) }
+}
 
-configureLifecycleTask("check")
+tasks.register("versionAsPrefixedCommit") {
+    group = "versioning"
+    doLast {
+        gitData.lastCommitHash?.let {
+            val prefix = providers.gradleProperty("commitPrefix").getOrElse("adhoc")
+            val newPrerel = prefix + ".x" + it.take(8)
+            val currVer =
+                SemVer.parse(layout.projectDirectory.versionTxt().asFile.readText().trim())
+            try {
+                val newVer = SemVer(currVer.major, currVer.minor, currVer.patch, newPrerel)
+                Utils.updateVersion(rootProject, newVer)
+            } catch (e: java.lang.IllegalArgumentException) {
+                throw IllegalArgumentException(String.format("%s: %s", e.message, newPrerel), e)
+            }
+        }
+    }
+}
 
-configureLifecycleTask("build")
+tasks.register("versionAsSnapshot") {
+    group = "versioning"
+    doLast {
+        val currVer = SemVer.parse(layout.projectDirectory.versionTxt().asFile.readText().trim())
+        val newVer = SemVer(currVer.major, currVer.minor, currVer.patch, "SNAPSHOT")
 
-configureLifecycleTask("spotlessCheck")
+        Utils.updateVersion(rootProject, newVer)
+    }
+}
 
-configureLifecycleTask("spotlessApply")
+tasks.register("versionAsSpecified") {
+    group = "versioning"
+    doLast {
+        val verStr = providers.gradleProperty("newVersion")
 
-configureLifecycleTask("checkAllModuleInfo")
+        if (!verStr.isPresent) {
+            throw IllegalArgumentException(
+                "No newVersion property provided! Please add the parameter -PnewVersion=<version> when running this task."
+            )
+        }
 
-fun configureLifecycleTask(taskName: String) {
-    tasks.named(taskName) {
-        dependsOn(subprojects.map { subproject -> ":${subproject.name}:${taskName}" })
+        val newVer = SemVer.parse(verStr.get())
+        Utils.updateVersion(rootProject, newVer)
     }
 }

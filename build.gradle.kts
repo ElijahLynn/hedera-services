@@ -14,4 +14,50 @@
  * limitations under the License.
  */
 
-plugins { id("com.hedera.hashgraph.umbrella") }
+plugins { id("com.hedera.hashgraph.root") }
+
+val sdkDir = layout.projectDirectory.dir("platform-sdk/sdk")
+
+tasks.register<JavaExec>("run") {
+    group = "application"
+    workingDir = sdkDir.asFile
+    mainClass.set("com.swirlds.platform.Browser")
+    classpath = sdkDir.asFileTree.matching { include("*.jar") }
+    jvmArgs = listOf("-agentlib:jdwp=transport=dt_socket,address=8888,server=y,suspend=n")
+    maxHeapSize = "8g"
+
+    dependsOn(":swirlds:copyLib")
+    dependsOn(":swirlds:copyApp")
+    dependsOn(
+        rootProject.subprojects
+            .filter {
+                it.projectDir.parentFile.name == "demos" || it.projectDir.parentFile.name == "tests"
+            }
+            .map { subproject ->
+                "${subproject.path}:copyLib"
+                "${subproject.path}:copyApp"
+            }
+    )
+}
+
+val cleanRun =
+    tasks.register<Delete>("cleanRun") {
+        delete(
+            sdkDir.asFileTree.matching {
+                include("settingsUsed.txt")
+                include("swirlds.jar")
+                include("metricsDoc.tsv")
+                include("*.csv")
+                include("*.log")
+            }
+        )
+
+        val dataDir = sdkDir.dir("data")
+        delete(dataDir.dir("accountBalances"))
+        delete(dataDir.dir("apps"))
+        delete(dataDir.dir("lib"))
+        delete(dataDir.dir("recordstreams"))
+        delete(dataDir.dir("saved"))
+    }
+
+tasks.clean { dependsOn(cleanRun) }
