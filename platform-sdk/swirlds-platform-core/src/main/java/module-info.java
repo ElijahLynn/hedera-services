@@ -148,7 +148,6 @@ module com.swirlds.platform.core {
     requires jdk.management;
     requires jdk.net;
     requires org.apache.commons.lang3;
-    requires org.apache.logging.log4j.core;
     requires org.bouncycastle.pkix;
     requires org.bouncycastle.provider;
     requires static com.github.spotbugs.annotations;

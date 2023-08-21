@@ -37,6 +37,7 @@ open module com.swirlds.jasperdb {
     requires transitive com.swirlds.common;
     requires transitive com.swirlds.config.api;
     requires transitive com.swirlds.virtualmap;
+    requires com.swirlds.base;
     requires com.swirlds.logging;
     requires java.management;
     requires jdk.management;
