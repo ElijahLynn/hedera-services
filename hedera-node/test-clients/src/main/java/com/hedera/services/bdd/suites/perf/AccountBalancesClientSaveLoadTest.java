@@ -85,8 +85,8 @@ public class AccountBalancesClientSaveLoadTest extends LoadTest {
     static final int MAX_TOKEN_TRANSFER = 100;
     static final int SECOND = 1000;
 
-    @SuppressWarnings("java:S2245") // using java.util.Random in tests is fine
-    private static final Random RANDOM = new Random(588616L);
+    @SuppressWarnings("java:S2245")
+    private static final Random RANDOM = new Random();
 
     private static final int TOTAL_TEST_TOKENS = 500;
     private static final String ACCT_NAME_PREFIX = "acct-";
@@ -177,7 +177,7 @@ public class AccountBalancesClientSaveLoadTest extends LoadTest {
                                         try {
                                             acctID = spec.registry().getAccountID(acctName);
                                         } catch (RegistryNotFound e) {
-                                            log.info("{} was not created successfully.", acctName);
+                                            log.info("{} was not created successfully.", acctName, e);
                                             continue;
                                         }
                                         var op = getAccountBalance(HapiPropertySource.asAccountString(acctID))
