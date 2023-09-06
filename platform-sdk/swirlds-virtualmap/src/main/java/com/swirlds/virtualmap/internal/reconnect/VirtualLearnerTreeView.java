@@ -30,6 +30,7 @@ import com.swirlds.common.merkle.synchronization.utility.MerkleSynchronizationEx
 import com.swirlds.common.merkle.synchronization.views.LearnerTreeView;
 import com.swirlds.common.threading.manager.ThreadManager;
 import com.swirlds.common.threading.pool.StandardWorkGroup;
+import com.swirlds.logging.LogMarker;
 import com.swirlds.virtualmap.VirtualKey;
 import com.swirlds.virtualmap.VirtualValue;
 import com.swirlds.virtualmap.datasource.VirtualKeySet;
@@ -37,6 +38,9 @@ import com.swirlds.virtualmap.datasource.VirtualLeafRecord;
 import com.swirlds.virtualmap.internal.RecordAccessor;
 import com.swirlds.virtualmap.internal.VirtualStateAccessor;
 import com.swirlds.virtualmap.internal.merkle.VirtualRootNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -53,6 +57,8 @@ import java.util.Objects;
  */
 public final class VirtualLearnerTreeView<K extends VirtualKey, V extends VirtualValue>
         extends VirtualTreeViewBase<K, V> implements LearnerTreeView<Long> {
+
+    private static final Logger logger = LogManager.getLogger(VirtualLearnerTreeView.class);
 
     /**
      * Some reasonable default initial capacity for the {@link BooleanBitSetQueue}s used for
@@ -223,7 +229,15 @@ public final class VirtualLearnerTreeView<K extends VirtualKey, V extends Virtua
 
         final VirtualLeafRecord<K, V> leaf = in.readSerializable(false, VirtualLeafRecord::new);
         nodeRemover.newLeafNode(leaf.getPath(), leaf.getKey());
-        root.handleReconnectLeaf(leaf); // may block if hashing is slower than ingest
+        long timestamp = System.currentTimeMillis();
+        try {
+            root.handleReconnectLeaf(leaf); // may block if hashing is slower than ingest
+        } finally {
+            long timeTook = System.currentTimeMillis() - timestamp;
+            if(timeTook > 10000) {
+                logger.info(LogMarker.RECONNECT.getMarker(), "handleReconnect leaf took {} ms", timeTook);
+            }
+        }
         return leaf.getPath();
     }
 

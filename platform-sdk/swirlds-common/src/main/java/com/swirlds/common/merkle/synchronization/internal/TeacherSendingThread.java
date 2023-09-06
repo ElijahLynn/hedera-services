@@ -190,8 +190,19 @@ public class TeacherSendingThread<T> {
                             "Teacher's sending thread is requested to stop teaching (fallen behind?)");
                     break;
                 }
-                final T node = view.getNextNodeToHandle();
-                sendLesson(node);
+                long timestamp = System.currentTimeMillis();
+
+                try {
+                    final T node = view.getNextNodeToHandle();
+                    sendLesson(node);
+                } finally {
+                    timestamp = System.currentTimeMillis() - timestamp;
+                    if(timestamp > 10000) {
+                        logger.info(RECONNECT.getMarker(), "Teacher's sending thread took {} ms to send a lesson",
+                                timestamp);
+                    }
+
+                }
             }
         } catch (final InterruptedException ex) {
             logger.warn(RECONNECT.getMarker(), "teacher's sending thread interrupted");
