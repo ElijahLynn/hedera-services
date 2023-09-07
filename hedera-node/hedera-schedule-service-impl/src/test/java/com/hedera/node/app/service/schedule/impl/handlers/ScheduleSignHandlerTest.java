@@ -28,6 +28,7 @@ import com.hedera.node.app.spi.workflows.PreCheckException;
 import com.hedera.node.app.spi.workflows.PreHandleContext;
 import com.hedera.node.app.workflows.prehandle.PreHandleContextImpl;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import java.security.InvalidKeyException;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,10 +37,9 @@ class ScheduleSignHandlerTest extends ScheduleHandlerTestBase {
     private ScheduleSignHandler subject;
 
     private PreHandleContext realPreContext;
-    private TransactionBody scheduled;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() throws PreCheckException, InvalidKeyException {
         subject = new ScheduleSignHandler();
         setUpBase();
     }
@@ -72,6 +72,10 @@ class ScheduleSignHandlerTest extends ScheduleHandlerTestBase {
         assertThat(realPreContext.payerKey()).isEqualTo(schedulerKey);
         assertThat(realPreContext.optionalNonPayerKeys()).isNotEqualTo(Collections.emptySet());
     }
+
+    // TODO: Create test for pure checks
+
+    // TODO: Create a few tests for Handle
 
     private TransactionBody scheduleSignTransaction(@Nullable final ScheduleID idToUse) {
         final ScheduleID confirmedId = idToUse == null ? testScheduleID : idToUse;

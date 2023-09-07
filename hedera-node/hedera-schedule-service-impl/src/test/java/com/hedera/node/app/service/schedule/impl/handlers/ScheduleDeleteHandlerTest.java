@@ -19,9 +19,11 @@ package com.hedera.node.app.service.schedule.impl.handlers;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 import com.hedera.hapi.node.base.AccountID;
+import com.hedera.hapi.node.base.Key;
 import com.hedera.hapi.node.base.ResponseCodeEnum;
 import com.hedera.hapi.node.base.TransactionID;
 import com.hedera.hapi.node.scheduled.ScheduleDeleteTransactionBody;
+import com.hedera.hapi.node.state.schedule.Schedule;
 import com.hedera.hapi.node.transaction.TransactionBody;
 import com.hedera.node.app.spi.fixtures.Assertions;
 import com.hedera.node.app.spi.workflows.PreCheckException;
@@ -31,7 +33,6 @@ import java.security.InvalidKeyException;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 
 class ScheduleDeleteHandlerTest extends ScheduleHandlerTestBase {
     private final AccountID scheduleDeleter =
@@ -41,10 +42,11 @@ class ScheduleDeleteHandlerTest extends ScheduleHandlerTestBase {
     private PreHandleContext realPreContext;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() throws PreCheckException, InvalidKeyException {
         setUpBase();
         subject = new ScheduleDeleteHandler();
-        BDDMockito.given(accountStore.getAccountById(scheduleDeleter)).willReturn(payerAccount);
+        reset(accountById);
+        accountsMapById.put(scheduleDeleter, payerAccount);
     }
 
     @Test
@@ -62,7 +64,7 @@ class ScheduleDeleteHandlerTest extends ScheduleHandlerTestBase {
     void failsIfScheduleMissing() throws PreCheckException {
         final TransactionBody schedule = scheduleDeleteTransaction();
         realPreContext = new PreHandleContextImpl(mockStoreFactory, schedule, testConfig, mockDispatcher);
-        BDDMockito.given(schedulesById.get(testScheduleID)).willReturn(null);
+        scheduleMapById.put(testScheduleID, null);
 
         Assertions.assertThrowsPreCheck(() -> subject.preHandle(realPreContext), ResponseCodeEnum.INVALID_SCHEDULE_ID);
     }
@@ -72,11 +74,19 @@ class ScheduleDeleteHandlerTest extends ScheduleHandlerTestBase {
     void failsIfScheduleIsImmutable() throws PreCheckException {
         final TransactionBody schedule = scheduleDeleteTransaction();
         realPreContext = new PreHandleContextImpl(mockStoreFactory, schedule, testConfig, mockDispatcher);
-        BDDMockito.given(scheduleInState.adminKey()).willReturn(null);
 
+        // Argh. Spotless is force wrapping fluent expressions at 73 characters.
+        final Schedule noAdmin =
+                scheduleInState.copyBuilder().adminKey((Key) null).build();
+        reset(writableById);
+        scheduleMapById.put(scheduleInState.scheduleId(), noAdmin);
         Assertions.assertThrowsPreCheck(
                 () -> subject.preHandle(realPreContext), ResponseCodeEnum.SCHEDULE_IS_IMMUTABLE);
     }
+
+    // TODO: Create test for pure checks
+
+    // TODO: Create a few tests for Handle
 
     private TransactionBody scheduleDeleteTransaction() {
         return TransactionBody.newBuilder()

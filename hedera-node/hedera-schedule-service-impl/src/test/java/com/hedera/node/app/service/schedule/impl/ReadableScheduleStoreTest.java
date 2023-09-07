@@ -22,6 +22,7 @@ import com.hedera.hapi.node.base.ScheduleID;
 import com.hedera.hapi.node.scheduled.SchedulableTransactionBody;
 import com.hedera.hapi.node.state.schedule.Schedule;
 import com.hedera.hapi.node.state.token.Account;
+import com.hedera.hapi.node.token.CryptoCreateTransactionBody;
 import com.hedera.node.app.service.schedule.ReadableScheduleStore;
 import com.hedera.node.app.service.token.ReadableAccountStore;
 import com.hedera.node.app.spi.state.ReadableKVStateBase;
@@ -94,6 +95,8 @@ class ReadableScheduleStoreTest {
         BDDMockito.given(accountStore.getAccountById(scheduler)).willReturn(schedulerAccount);
         BDDMockito.given(accountStore.getAccountById(payer)).willReturn(payerAccount);
 
+        scheduled = createSampleScheduled();
+
         BDDMockito.given(scheduleInState.hasPayerAccountId()).willReturn(Boolean.TRUE);
         BDDMockito.given(scheduleInState.payerAccountId()).willReturn(payer);
         BDDMockito.given(scheduleInState.schedulerAccountId()).willReturn(adminAccount);
@@ -138,5 +141,14 @@ class ReadableScheduleStoreTest {
         BDDAssertions.assertThat(readSchedule.payerAccountId()).isNull();
         BDDAssertions.assertThat(readSchedule.adminKey()).isEqualTo(adminKey);
         BDDAssertions.assertThat(readSchedule.scheduledTransaction()).isEqualTo(scheduled);
+    }
+
+    // TODO: Create test for getByExpirationSecond.
+
+    private static SchedulableTransactionBody createSampleScheduled() {
+        final SchedulableTransactionBody scheduledTxn = SchedulableTransactionBody.newBuilder()
+                .cryptoCreateAccount(CryptoCreateTransactionBody.newBuilder())
+                .build();
+        return scheduledTxn;
     }
 }
