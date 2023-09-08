@@ -15,7 +15,6 @@ module com.hedera.node.test.clients {
     requires transitive org.junit.jupiter.api;
     requires transitive org.junit.platform.commons;
     requires transitive org.junit.platform.engine;
-    requires transitive org.junit.jupiter.engine;
     requires transitive org.testcontainers;
     requires transitive org.yaml.snakeyaml;
     requires transitive tuweni.bytes;
@@ -27,7 +26,6 @@ module com.hedera.node.test.clients {
     requires com.github.docker.java.api;
     requires com.swirlds.config.api;
     requires com.swirlds.fchashmap;
-    requires com.swirlds.merkle;
     requires com.swirlds.merkledb;
     requires com.swirlds.platform.core;
     requires com.swirlds.virtualmap;
