@@ -150,7 +150,7 @@ public class VirtualMerkleLeafHasher<K extends VirtualKey, V extends VirtualValu
         final Path classFolder = getAbsolutePath(args[0]);
         try (final Stream<Path> classFolderList = Files.list(classFolder)) {
             final Path nodeFolder = classFolderList.toList().get(0);
-            try (final Stream<Path> swirldIdList = Files.list(nodeFolder.resolve("123"))) {
+            try (final Stream<Path> swirldIdList = Files.list(nodeFolder.resolve("."))) {
                 roundsFolders = swirldIdList.toList();
             }
         }
@@ -171,6 +171,7 @@ public class VirtualMerkleLeafHasher<K extends VirtualKey, V extends VirtualValu
                 accountsMap.loadFromFile(roundFolder.resolve(accountsName));
                 final VirtualMerkleLeafHasher<AccountVirtualMapKey, AccountVirtualMapValue> accountsHasher =
                         new VirtualMerkleLeafHasher<>(accountsMap);
+                System.out.println("Processing " + roundFolder);
                 accountsHash = accountsHasher.validate();
             } catch (final IOException e) {
                 accountsHash = null;
