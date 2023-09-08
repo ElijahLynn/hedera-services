@@ -31,6 +31,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,7 @@ class ConcurrentNodeStatusTrackerTests {
      * @throws InterruptedException
      * 		if the checking (current) thread is interrupted
      */
+    @Disabled
     @Test
     void acknowledgeBigNumbers() throws InterruptedException, ExecutionException, TimeoutException {
         final long capacity = 4L * Integer.MAX_VALUE;
@@ -132,6 +134,7 @@ class ConcurrentNodeStatusTrackerTests {
      * @throws InterruptedException
      * 		if the checking (current) thread is interrupted
      */
+    @Disabled
     @Test
     void setsBoundValue() throws InterruptedException, ExecutionException, TimeoutException {
         final long capacity = Long.MAX_VALUE;

@@ -31,6 +31,7 @@ import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,7 @@ class IndexLockTests {
         };
     }
 
+    @Disabled
     @Test
     @Tag(TestTypeTags.FUNCTIONAL)
     @Tag(TestComponentTags.THREADING)

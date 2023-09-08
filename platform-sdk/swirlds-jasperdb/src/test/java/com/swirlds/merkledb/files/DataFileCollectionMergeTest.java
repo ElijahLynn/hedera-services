@@ -35,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLongArray;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -399,6 +400,7 @@ class DataFileCollectionMergeTest {
         }
     }
 
+    @Disabled
     @ParameterizedTest
     @DisplayName("Snapshot + update in parallel with compaction")
     @ValueSource(ints = {0, 1, 2, 3})

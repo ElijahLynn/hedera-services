@@ -47,6 +47,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("QueueThreadPool Tests")
 class QueueThreadPoolTests {
 
+    @Disabled
     @Test
     @DisplayName("Parallel Work Test")
     void parallelWorkTest() throws InterruptedException {

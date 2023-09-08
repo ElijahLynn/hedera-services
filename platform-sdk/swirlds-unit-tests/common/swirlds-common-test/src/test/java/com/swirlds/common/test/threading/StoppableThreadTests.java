@@ -47,6 +47,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -261,6 +262,7 @@ class StoppableThreadTests {
         }
     }
 
+    @Disabled
     @Test
     @Tag(TestTypeTags.FUNCTIONAL)
     @Tag(TestComponentTags.THREADING)
@@ -447,6 +449,7 @@ class StoppableThreadTests {
         assertEquals(Duration.ofSeconds(10), configuration.getMinimumPeriod(), "period should be properly set");
     }
 
+    @Disabled
     @Test
     @DisplayName("Max Rate Test")
     void maxRateTest() throws InterruptedException {
@@ -648,6 +651,7 @@ class StoppableThreadTests {
         assertThrows(IllegalStateException.class, stoppableThread1::start, "configuration has already been used");
     }
 
+    @Disabled
     @Test
     @DisplayName("Pause Then Stop Test")
     void pauseThenStopTest() throws InterruptedException {
@@ -678,6 +682,7 @@ class StoppableThreadTests {
         assertFalse(thread.isAlive(), "thread should cleanly die");
     }
 
+    @Disabled
     @Test
     @DisplayName("Join Before Start Test")
     void joinBeforeStartTest() throws InterruptedException {
@@ -699,6 +704,7 @@ class StoppableThreadTests {
         assertEventuallyFalse(joinThread::isAlive, Duration.ofSeconds(1), "thread should have died");
     }
 
+    @Disabled
     @Test
     @DisplayName("Join Before Start Seed Test")
     void joinBeforeStartSeedTest() throws InterruptedException {

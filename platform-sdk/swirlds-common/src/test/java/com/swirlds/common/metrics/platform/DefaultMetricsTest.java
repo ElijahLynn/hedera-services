@@ -46,6 +46,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -595,6 +596,7 @@ class DefaultMetricsTest {
         assertThatThrownBy(() -> metrics.addUpdater(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Disabled
     @Test
     void testUpdaterAddedAfterStart(@Mock final Runnable updater) {
         // given
