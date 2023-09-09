@@ -168,7 +168,7 @@ public class AccountBalancesClientSaveLoadTest extends LoadTest {
                                 while (acctProcessed <= totalAccounts) {
                                     List<HapiSpecOperation> ops = new ArrayList<>();
                                     String acctName = null;
-                                    log.info("Dump registry {} .", spec.registry().stringValues);
+                                    log.info("Dump registry {} .", spec.registry().stringValues());
                                     for (int i = acctProcessed + 1;
                                             i <= acctProcessed + batchSize && i <= totalAccounts;
                                             i++) {
