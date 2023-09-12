@@ -34,10 +34,7 @@ import com.swirlds.platform.consensus.SyntheticSnapshot;
 import com.swirlds.platform.internal.EventImpl;
 import com.swirlds.platform.state.signed.SignedState;
 import com.swirlds.platform.state.signed.SignedStateFileReader;
-import com.swirlds.platform.test.consensus.framework.ConsensusTestOrchestrator;
-import com.swirlds.platform.test.consensus.framework.OrchestratorBuilder;
-import com.swirlds.platform.test.consensus.framework.TestInput;
-import com.swirlds.platform.test.consensus.framework.Util;
+import com.swirlds.platform.test.consensus.framework.*;
 import com.swirlds.platform.test.consensus.framework.validation.EventRatioValidation;
 import com.swirlds.platform.test.consensus.framework.validation.Validations;
 import com.swirlds.platform.test.event.emitter.PriorityEventEmitter;
@@ -622,5 +619,19 @@ public final class ConsensusTestDefinitions {
         orchestrator.generateEvents(0.5);
         orchestrator.validate(
                 Validations.standard().ratios(EventRatioValidation.blank().setMinimumConsensusRatio(0.8)));
+    }
+
+    public static void genesisSnapshotTest(final TestInput input) {
+        final ConsensusTestOrchestrator orchestrator = OrchestratorBuilder.builder()
+                .setTestInput(input)
+                .build();
+        for (final ConsensusTestNode node : orchestrator.getNodes()) {
+            node.getIntake().loadSnapshot(SyntheticSnapshot.createGenesisSnapshot());
+        }
+
+        orchestrator.generateAllEvents()
+                .validateAndClear(Validations.standard()
+                        .ratios(EventRatioValidation.standard()
+                                .setMinimumConsensusRatio(0.9 - (0.05 * input.numberOfNodes()))));
     }
 }

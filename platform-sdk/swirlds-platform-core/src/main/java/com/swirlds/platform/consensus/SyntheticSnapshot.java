@@ -17,6 +17,7 @@
 package com.swirlds.platform.consensus;
 
 import com.swirlds.common.config.ConsensusConfig;
+import com.swirlds.platform.event.EventConstants;
 import com.swirlds.platform.event.GossipEvent;
 import com.swirlds.platform.state.MinGenInfo;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -62,5 +63,14 @@ public final class SyntheticSnapshot {
                 minGenInfos,
                 lastConsensusOrder + 1,
                 ConsensusUtils.calcMinTimestampForNextEvent(roundTimestamp));
+    }
+
+    public static @NonNull ConsensusSnapshot createGenesisSnapshot(){
+        return new ConsensusSnapshot(
+                ConsensusConstants.ROUND_FIRST,
+                List.of(),
+                List.of(new MinGenInfo(ConsensusConstants.ROUND_FIRST, GraphGenerations.FIRST_GENERATION)),
+                0,
+                Instant.EPOCH);
     }
 }
