@@ -18,6 +18,6 @@ pluginManagement { includeBuild("build-logic") }
 
 plugins { id("com.hedera.hashgraph.settings") }
 
-includeBuild("platform-sdk")
+includeBuild("platform-sdk") { name = "swirlds-platform" }
 
 includeBuild("hedera-node")

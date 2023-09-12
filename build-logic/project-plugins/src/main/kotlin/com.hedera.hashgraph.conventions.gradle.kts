@@ -116,7 +116,7 @@ tasks.withType<Test>().configureEach {
     // Only start running 'node' tests after all 'platform' tests finished-
     // This is to not have 'node' tests run in parallel with 'platform' tests.
     if (gradle.rootBuild().startParameter.taskNames.contains("check")) {
-        dependsOn(gradle.includedBuild("platform-sdk").task(":check"))
+        dependsOn(gradle.includedBuild("swirlds-platform").task(":check"))
     }
 }
 

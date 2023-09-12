@@ -22,7 +22,7 @@ plugins { id("com.hedera.hashgraph.settings") }
 
 includeBuild("../hedera-dependency-versions")
 
-includeBuild("../platform-sdk")
+includeBuild("../platform-sdk") { name = "swirlds-platform" }
 
 include(":app", "hedera-app")
 

@@ -18,4 +18,4 @@ pluginManagement { includeBuild("../../../../build-logic") }
 
 includeBuild("../../../../hedera-dependency-versions")
 
-includeBuild("../../../../platform-sdk")
+includeBuild("../../../../platform-sdk") { name = "swirlds-platform" }
